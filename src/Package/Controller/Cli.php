@@ -1,30 +1,30 @@
 <?php
 
-namespace Package\Raxon\Org\Test\Controller;
+namespace Package\Raxon\Test\Controller;
 
-use Raxon\Org\App;
-use Raxon\Org\Config;
+use Raxon\App;
+use Raxon\Config;
 
-use Raxon\Org\Module\Core;
-use Raxon\Org\Module\Controller;
-use Raxon\Org\Module\Data;
-use Raxon\Org\Module\Dir;
-use Raxon\Org\Module\File;
+use Raxon\Module\Core;
+use Raxon\Module\Controller;
+use Raxon\Module\Data;
+use Raxon\Module\Dir;
+use Raxon\Module\File;
 
 use Exception;
 
-use Raxon\Org\Exception\LocateException;
-use Raxon\Org\Exception\ObjectException;
-use Raxon\Org\Exception\UrlEmptyException;
-use Raxon\Org\Exception\UrlNotExistException;
+use Raxon\Exception\LocateException;
+use Raxon\Exception\ObjectException;
+use Raxon\Exception\UrlEmptyException;
+use Raxon\Exception\UrlNotExistException;
 
 class Cli extends Controller {
     const DIR = __DIR__ . '/';
     const MODULE_INFO = 'Info';
     const INFO = [
-        '{{binary()}} raxon_org/test                    | Test options',
-        '{{binary()}} raxon_org/test setup              | Test setup',
-        '{{binary()}} raxon_org/test run                | Run tests'
+        '{{binary()}} raxon/test                    | Test options',
+        '{{binary()}} raxon/test setup              | Test setup',
+        '{{binary()}} raxon/test run                | Run tests'
     ];
 
     /**

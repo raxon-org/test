@@ -1,19 +1,19 @@
 <?php
-namespace Package\Raxon\Org\Test\Trait;
+namespace Package\Raxon\Test\Trait;
 
-use Raxon\Org\Config;
+use Raxon\Config;
 
-use Raxon\Org\Module\Cli;
-use Raxon\Org\Module\Core;
-use Raxon\Org\Module\Event;
-use Raxon\Org\Module\Dir;
-use Raxon\Org\Module\File;
+use Raxon\Module\Cli;
+use Raxon\Module\Core;
+use Raxon\Module\Event;
+use Raxon\Module\Dir;
+use Raxon\Module\File;
 
 use Exception;
 
-use Raxon\Org\Exception\FileWriteException;
-use Raxon\Org\Exception\FileAppendException;
-use Raxon\Org\Exception\ObjectException;
+use Raxon\Exception\FileWriteException;
+use Raxon\Exception\FileAppendException;
+use Raxon\Exception\ObjectException;
 
 
 trait Main {
@@ -73,7 +73,7 @@ trait Main {
         }
         //only pest tests are supported
         $testable = [];
-        $testable[] = 'raxon_org';
+        $testable[] = 'raxon';
         if(
             property_exists($options, 'testable') &&
             is_array($options->testable)
