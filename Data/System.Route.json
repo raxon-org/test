@@ -5,7 +5,7 @@
         "#class": "System.Route",
         "name": "raxon-org-cli-test",
         "path": "raxon\/test",
-        "controller": "Package.Raxon.Org.Test.Controller.Cli.run",
+        "controller": "Package.Raxon.Test.Controller.Cli.run",
         "request": {
           "language": "en"
         },
