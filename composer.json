@@ -1,0 +1,26 @@
+{
+  "name" : "raxon/test",
+  "description" : "raxon/test see https://raxon.org for detailed usage",
+  "type" : "package",
+  "keywords" : ["node", "raxon", "org", "keyboard", "package", "framework", "raxon.org", "test"],
+  "homepage": "https://raxon.org",
+  "require" : {
+    "ext-posix": "*",
+    "ext-zlib": "*",
+    "ext-iconv": "*",
+    "raxon_org/framework": "*"
+  },
+  "require-dev": {
+    "pestphp/pest": "^2.34"
+  },
+  "license" : "MIT",
+  "authors" : [{
+    "name" : "Remco van der Velde",
+    "email" : "development@universeorange.com"
+  }],
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  }
+}
