@@ -64,11 +64,13 @@ trait Main {
                     ];
                 }
             }
-            echo $output;
+//            echo $output;
         }
+        /*
         if($notification){
             echo $notification;
         }
+        */
         $dir = new Dir();
         $dir_vendor = $dir->read($object->config('project.dir.vendor'));
         if(!$dir_vendor){
@@ -128,7 +130,7 @@ trait Main {
                                 File::exist($dir_test_url) &&
                                 Dir::is($dir_test_url)
                             ){
-                                $dir_target = $object->config('project.dir.test') .
+                                $dir_target = $object->config('project.dir.tests') .
                                     ucfirst($dir_record->name) .
                                     $object->config('ds')
                                 ;
@@ -152,7 +154,6 @@ trait Main {
                                         if($file->type === File::TYPE){
                                             $read = File::read($file->url);
                                             if(str_contains($read, 'PHPUnit\Framework\TestCase')){
-                                                d('found PHPUnit test');
                                                 //we want pest tests
                                                 continue;
                                             }
