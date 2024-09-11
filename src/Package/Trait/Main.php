@@ -131,6 +131,8 @@ trait Main {
                                 Dir::is($dir_test_url)
                             ){
                                 $dir_target = $object->config('project.dir.tests') .
+                                    'Feature' .
+                                    $object->config('ds') .
                                     ucfirst($dir_record->name) .
                                     $object->config('ds')
                                 ;
