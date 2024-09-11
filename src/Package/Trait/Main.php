@@ -186,7 +186,7 @@ trait Main {
         $url_xml = $object->config('project.dir.root') . 'phpunit.xml';
         $write = [];
         $write[] = '<?xml version="1.0" encoding="UTF-8"?>';
-        $write[] = '<phpunit bootstrap="Test/bootstrap.php"';
+        $write[] = '<phpunit bootstrap="tests/bootstrap.php"';
         $write[] = '         colors="true">';
         $write[] = '    <testsuites>';
         foreach($testsuite as $nr => $record){
