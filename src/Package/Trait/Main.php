@@ -101,8 +101,10 @@ trait Main {
             Dir::create($object->config('project.dir.test'), Dir::CHMOD);
         }
         $testsuite = [];
+        d($testable);
         foreach($dir_vendor as $nr => $record){
             $package = $record->name;
+            ddd($package);
             if(
                 in_array(
                     $package,
