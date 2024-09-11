@@ -101,7 +101,6 @@ trait Main {
             Dir::create($object->config('project.dir.test'), Dir::CHMOD);
         }
         $testsuite = [];
-        d($testable);
         foreach($dir_vendor as $nr => $record){
             $package = $record->name;
             if(
@@ -113,12 +112,10 @@ trait Main {
                 $record->type === Dir::TYPE
             ){
                 $dir_inner = $dir->read($record->url);
-                d($dir_inner);
                 if($dir_inner){
                     foreach($dir_inner as $dir_inner_nr => $dir_record){
                         foreach($dir_tests as $dir_test){
                             $dir_test_url = $dir_record->url . $dir_test . $object->config('ds');
-                            $read = $dir->read($dir_test_url);
                             if(
                                 File::exist($dir_test_url) &&
                                 Dir::is($dir_test_url)
@@ -133,6 +130,7 @@ trait Main {
                                 ];
                                 $dir_test_read = $dir->read($dir_test_url);
                                 if($dir_test_read){
+                                    ddd($packages);
                                     if(array_key_exists($record->name . '/' . $dir_record->name, $packages)){
                                         $package = $packages[$record->name . '/' . $dir_record->name];
                                         echo Cli::info('Copying', [
