@@ -36,7 +36,7 @@ trait Main {
             throw $exception;
         }
         ob_start();
-        Core::execute($object, 'composer show', $output, $notification);
+        Core::execute($object, 'composer show --format=json', $output, $notification);
         $output = ob_get_clean();
         $packages = [];
         if($output){
