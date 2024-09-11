@@ -108,8 +108,8 @@ trait Main {
                 'Tests'
             ];
         }
-        if(!Dir::is($object->config('project.dir.test'))){
-            Dir::create($object->config('project.dir.test'), Dir::CHMOD);
+        if(!Dir::is($object->config('project.dir.tests'))){
+            Dir::create($object->config('project.dir.tests'), Dir::CHMOD);
         }
         $testsuite = [];
         foreach($dir_vendor as $nr => $record){
@@ -137,9 +137,7 @@ trait Main {
                                     ucfirst($dir_record->name) .
                                     $object->config('ds')
                                 ;
-                                $dir_target = $object->config('project.dir.tests') .
-                                    $object->config('ds')
-                                ;
+                                $dir_target = $object->config('project.dir.tests');
                                 $testsuite[] = [
                                     'name' => $dir_record->name,
                                     'directory' => $dir_target
