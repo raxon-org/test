@@ -136,6 +136,10 @@ trait Main {
                                     ucfirst($dir_record->name) .
                                     $object->config('ds')
                                 ;
+                                $dir_target = $object->config('project.dir.tests') .
+                                    'Feature' .
+                                    $object->config('ds')
+                                ;
                                 $testsuite[] = [
                                     'name' => $dir_record->name,
                                     'directory' => $dir_target
