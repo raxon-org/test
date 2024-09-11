@@ -35,7 +35,9 @@ trait Main {
             ]);
             throw $exception;
         }
+        ob_start();
         Core::execute($object, 'composer show', $output, $notification);
+        $output = ob_get_clean();
         $packages = [];
         if($output){
             $data = explode(PHP_EOL, $output);
