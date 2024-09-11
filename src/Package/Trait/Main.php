@@ -103,8 +103,6 @@ trait Main {
         $testsuite = [];
         d($testable);
         foreach($dir_vendor as $nr => $record){
-            $package = $record->name;
-            ddd($package);
             if(
                 in_array(
                     $package,
@@ -116,6 +114,7 @@ trait Main {
                 $dir_inner = $dir->read($record->url);
                 if($dir_inner){
                     foreach($dir_inner as $dir_inner_nr => $dir_record){
+                        d($dir_record);
                         foreach($dir_tests as $dir_test){
                             $dir_test_url = $dir_record->url . $dir_test . $object->config('ds');
                             $read = $dir->read($dir_test_url);
