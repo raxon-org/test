@@ -138,7 +138,6 @@ trait Main {
                                     $object->config('ds')
                                 ;
                                 $dir_target = $object->config('project.dir.tests') .
-                                    'Feature' .
                                     $object->config('ds')
                                 ;
                                 $testsuite[] = [
