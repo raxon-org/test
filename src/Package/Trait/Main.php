@@ -43,7 +43,7 @@ trait Main {
         ;
         Dir::create($dir_ramdisk_test, Dir::CHMOD);
         $url_ramdisk_test = $dir_ramdisk_test . 'composer.json';
-        Core::execute($object, 'composer show --format=json >> ' . $url_ramdisk_test, $output, $notification);
+        Core::execute($object, 'composer show >> ' . $url_ramdisk_test, $output, $notification);
         $packages = [];
         $output = File::read($url_ramdisk_test);
         if($output){
