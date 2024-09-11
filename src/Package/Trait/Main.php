@@ -48,7 +48,6 @@ trait Main {
         $output = File::read($url_ramdisk_test);
         if($output){
             $data = explode(PHP_EOL, $output);
-            ddd($data);
             foreach($data as $nr => $line){
                 $line = trim($line);
                 if($line){
@@ -65,14 +64,11 @@ trait Main {
                     ];
                 }
             }
-            ddd($data);
             echo $output;
         }
         if($notification){
             echo $notification;
         }
-        d($output);
-        d($notification);
         ddd($packages);
         $dir = new Dir();
         $dir_vendor = $dir->read($object->config('project.dir.vendor'));
