@@ -60,6 +60,9 @@ trait Main {
         if($notification){
             echo $notification;
         }
+        d($output);
+        d($notification);
+        ddd($packages);
         $dir = new Dir();
         $dir_vendor = $dir->read($object->config('project.dir.vendor'));
 
