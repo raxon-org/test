@@ -202,7 +202,7 @@ trait Main {
         $write[] = '';
         $write[] = 'require_once __DIR__ . \'/../vendor/autoload.php\';';
         $write[] = '';
-        File::write($object->config('project.dir.test') . 'bootstrap.php', implode(PHP_EOL, $write));
+        File::write($object->config('project.dir.tests') . 'bootstrap.php', implode(PHP_EOL, $write));
 //        echo Cli::labels();
         $command = './vendor/bin/pest --init';
         $code = Core::execute($object, $command, $output, $notification);
