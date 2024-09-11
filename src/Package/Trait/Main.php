@@ -69,10 +69,8 @@ trait Main {
         if($notification){
             echo $notification;
         }
-        ddd($packages);
         $dir = new Dir();
         $dir_vendor = $dir->read($object->config('project.dir.vendor'));
-
         if(!$dir_vendor){
             $exception = new Exception('No vendor directory found...');
             Event::trigger($object, 'raxon.org.test.main.run.test', [
@@ -140,7 +138,6 @@ trait Main {
                                 ];
                                 $dir_test_read = $dir->read($dir_test_url);
                                 if($dir_test_read){
-                                    ddd($packages);
                                     if(array_key_exists($record->name . '/' . $dir_record->name, $packages)){
                                         $package = $packages[$record->name . '/' . $dir_record->name];
                                         echo Cli::info('Copying', [
