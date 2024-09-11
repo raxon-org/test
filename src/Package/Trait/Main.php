@@ -71,6 +71,7 @@ trait Main {
             echo $notification;
         }
         */
+        $output = '';
         $dir = new Dir();
         $dir_vendor = $dir->read($object->config('project.dir.vendor'));
         if(!$dir_vendor){
