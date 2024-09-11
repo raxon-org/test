@@ -48,6 +48,7 @@ trait Main {
         $output = File::read($url_ramdisk_test);
         if($output){
             $data = explode(PHP_EOL, $output);
+            ddd($data);
             foreach($data as $nr => $line){
                 $line = trim($line);
                 if($line){
