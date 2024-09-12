@@ -254,7 +254,6 @@ trait Main {
                             ]) .
                             ' tests from ' . $record->name . PHP_EOL
                         ;
-                        flush();
                     }
                 }
             }
@@ -349,7 +348,6 @@ trait Main {
                                             ' with version: '.
                                             $package['version'] . PHP_EOL
                                         ;
-                                        flush();
                                     }
                                     foreach($dir_test_read as $dir_test_nr => $file){
                                         if($file->type === File::TYPE){
