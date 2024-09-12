@@ -97,6 +97,9 @@ trait Main {
 //        echo Cli::labels();
     }
 
+    /**
+     * @throws ObjectException
+     */
     public function pest_run($flags, $options): void
     {
         $object = $this->object();
@@ -188,8 +191,71 @@ trait Main {
         $object = $this->object();
         $dir = new Dir();
         $domains = $dir->read($object->config('project.dir.domain'));
-        ddd($domains);
-
+        $dir_tests = null;
+        if(property_exists($options, 'directory_tests')){
+            if(is_string($options->directory_tests)){
+                $dir_tests = [$options->directory_tests];
+            }
+            elseif(is_array($options->directory_tests)){
+                $dir_tests = $options->directory_tests;
+            }
+        }
+        if($dir_tests === null){
+            $dir_tests = [
+                'test',
+                'tests',
+                'Test',
+                'Tests'
+            ];
+        }
+        foreach($domains as $nr => $record){
+            $dir_domain = $record->url;
+            $dir_inner = $dir->read($dir_domain);
+            if($dir_inner){
+                foreach($dir_inner as $dir_inner_nr => $dir_record){
+                    foreach($dir_tests as $dir_test){
+                        $dir_test_url = $dir_record->url . $dir_test . $object->config('ds');
+                        if(
+                            File::exist($dir_test_url) &&
+                            Dir::is($dir_test_url)
+                        ){
+                            $dir_target = $object->config('project.dir.tests') .
+                                'Feature' .
+                                $object->config('ds') .
+                                ucfirst($record->name) .
+                                $object->config('ds')
+                            ;
+                            $testsuite[] = [
+                                'name' => $record->name,
+                                'directory' => $dir_target
+                            ];
+                            $dir_test_read = $dir->read($dir_test_url);
+                            if($dir_test_read){
+                                foreach($dir_test_read as $dir_test_nr => $file){
+                                    if($file->type === File::TYPE){
+                                        $read = File::read($file->url);
+                                        if(str_contains($read, 'PHPUnit\Framework\TestCase')){
+                                            //we want pest tests
+                                            continue;
+                                        }
+                                        $target =
+                                            $dir_target .
+                                            $file->name
+                                        ;
+                                        if(!Dir::is($dir_target)){
+                                            Dir::create($dir_target, Dir::CHMOD);
+                                        }
+                                        if(!File::exist($target)){
+                                            File::copy($file->url, $target);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return $testsuite;
     }
 
