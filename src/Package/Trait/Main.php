@@ -187,7 +187,9 @@ trait Main {
     {
         $object = $this->object();
         $dir = new Dir();
-        ddd($object->config('project.dir.domain'));
+        $domains = $dir->read($object->config('project.dir.domain'));
+        ddd($domains);
+
         return $testsuite;
     }
 
