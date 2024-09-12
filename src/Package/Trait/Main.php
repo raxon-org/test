@@ -211,6 +211,7 @@ trait Main {
         foreach($domains as $nr => $record){
             $dir_domain = $record->url;
             $dir_inner = $dir->read($dir_domain);
+            ddd($dir_inner);
             if($dir_inner){
                 foreach($dir_inner as $dir_inner_nr => $dir_record){
                     foreach($dir_tests as $dir_test){
