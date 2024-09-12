@@ -3,6 +3,7 @@ namespace Package\Raxon\Test\Trait;
 
 use Raxon\Config;
 
+use Raxon\Exception\DirectoryCreateException;
 use Raxon\Module\Cli;
 use Raxon\Module\Core;
 use Raxon\Module\Event;
@@ -82,14 +83,123 @@ trait Main {
             ]);
             throw $exception;
         }
-        //only pest tests are supported
-        $testable = [];
-        $testable[] = 'raxon';
-        if(
-            property_exists($options, 'testable') &&
-            is_array($options->testable)
-        ){
-            $testable = $options->testable;
+        if(!Dir::is($object->config('project.dir.tests'))){
+            Dir::create($object->config('project.dir.tests'), Dir::CHMOD);
+        }
+        $testsuite = [];
+
+        $testsuite = $this->vendor_copy($flags, $options, $packages, $testsuite);
+        $testsuite = $this->domain_copy($flags, $options, $testsuite);
+        $this->create_phpunit($flags, $options, $testsuite);
+        $this->create_bootstrap($flags, $options, $testsuite);
+        $this->pest_init($flags, $options);
+        $this->pest_run($flags, $options);
+//        echo Cli::labels();
+    }
+
+    public function pest_run($flags, $options): void
+    {
+        $object = $this->object();
+        $command = './vendor/bin/pest';
+        $code = Core::execute($object, $command, $output, $notification);
+        if($output){
+            echo $output;
+        }
+        if($notification){
+            echo $notification;
+        }
+        if($code !== 0){
+            $exception = new Exception('Pest Tests failed...');
+            Event::trigger($object, 'raxon.org.test.main.run.test', [
+                'options' => $options,
+                'exception' => $exception,
+                'output' => $output,
+                'notification' => $notification
+            ]);
+            exit($code);
+        }
+    }
+
+
+    /**
+     * @throws ObjectException
+     */
+    public function pest_init($flags, $options): void
+    {
+        $object = $this->object();
+        $command = './vendor/bin/pest --init';
+        $code = Core::execute($object, $command, $output, $notification);
+        if($output){
+            echo $output;
+        }
+        if($notification){
+            echo $notification;
+        }
+        if($code !== 0){
+            $exception = new Exception('Pest initialization failed...');
+            Event::trigger($object, 'raxon.org.test.main.run.test', [
+                'options' => $options,
+                'exception' => $exception,
+                'output' => $output,
+                'notification' => $notification
+            ]);
+            exit($code);
+        }
+    }
+
+    /**
+     * @throws FileWriteException
+     */
+    public function create_bootstrap($flags, $options): bool | int
+    {
+        $object = $this->object();
+        $write = [];
+        $write[] = '<?php';
+        $write[] = '';
+        $write[] = 'require_once __DIR__ . \'/../vendor/autoload.php\';';
+        $write[] = '';
+        return File::write($object->config('project.dir.tests') . 'bootstrap.php', implode(PHP_EOL, $write));
+    }
+
+    /**
+     * @throws FileWriteException
+     */
+    public function create_phpunit($flags, $options, $testsuite): bool | int
+    {
+        $object = $this->object();
+        $url_xml = $object->config('project.dir.root') . 'phpunit.xml';
+        $write = [];
+        $write[] = '<?xml version="1.0" encoding="UTF-8"?>';
+        $write[] = '<phpunit bootstrap="tests/bootstrap.php"';
+        $write[] = '         colors="true">';
+        $write[] = '    <testsuites>';
+        foreach($testsuite as $nr => $record){
+            $write[] = '        <testsuite name="' . $record['name'] . '">';
+            $write[] = '            <directory>' . $record['directory'] . '</directory>';
+            $write[] = '        </testsuite>';
+        }
+        $write[] = '    </testsuites>';
+        $write[] = '</phpunit>';
+        return File::write($url_xml, implode(PHP_EOL, $write));
+    }
+
+    /**
+     * @throws DirectoryCreateException
+     * @throws ObjectException
+     * @throws Exception
+     */
+    public function vendor_copy($flags, $options, $packages, $testsuite): array
+    {
+        $object = $this->object();
+        $dir = new Dir();
+        $dir_vendor = $dir->read($object->config('project.dir.vendor'));
+        if(!$dir_vendor){
+            $exception = new Exception('No vendor directory found...');
+            Event::trigger($object, 'raxon.org.test.main.run.test', [
+                'options' => $options,
+                'exception' => $exception
+            ]);
+            throw $exception;
         }
         $dir_tests = null;
         if(property_exists($options, 'directory_tests')){
@@ -108,10 +218,15 @@ trait Main {
                 'Tests'
             ];
         }
-        if(!Dir::is($object->config('project.dir.tests'))){
-            Dir::create($object->config('project.dir.tests'), Dir::CHMOD);
+        //only pest tests are supported
+        $testable = [];
+        $testable[] = 'raxon';
+        if(
+            property_exists($options, 'testable') &&
+            is_array($options->testable)
+        ){
+            $testable = $options->testable;
         }
-        $testsuite = [];
         foreach($dir_vendor as $nr => $record){
             $package = $record->name;
             if(
@@ -149,12 +264,13 @@ trait Main {
                                     if(array_key_exists($record->name . '/' . $dir_record->name, $packages)){
                                         $package = $packages[$record->name . '/' . $dir_record->name];
                                         echo Cli::info('Copying', [
-                                            'capitals' => true
+                                                'capitals' => true
                                             ]) .
                                             ' tests from ' . $package['name'] .
                                             ' with version: '.
                                             $package['version'] . PHP_EOL
                                         ;
+                                        flush();
                                     }
                                     foreach($dir_test_read as $dir_test_nr => $file){
                                         if($file->type === File::TYPE){
@@ -182,62 +298,6 @@ trait Main {
                 }
             }
         }
-        $url_xml = $object->config('project.dir.root') . 'phpunit.xml';
-        $write = [];
-        $write[] = '<?xml version="1.0" encoding="UTF-8"?>';
-        $write[] = '<phpunit bootstrap="tests/bootstrap.php"';
-        $write[] = '         colors="true">';
-        $write[] = '    <testsuites>';
-        foreach($testsuite as $nr => $record){
-            $write[] = '        <testsuite name="' . $record['name'] . '">';
-            $write[] = '            <directory>' . $record['directory'] . '</directory>';
-            $write[] = '        </testsuite>';
-        }
-        $write[] = '    </testsuites>';
-        $write[] = '</phpunit>';
-        File::write($url_xml, implode(PHP_EOL, $write));
-        $write = [];
-        $write[] = '<?php';
-        $write[] = '';
-        $write[] = 'require_once __DIR__ . \'/../vendor/autoload.php\';';
-        $write[] = '';
-        File::write($object->config('project.dir.tests') . 'bootstrap.php', implode(PHP_EOL, $write));
-//        echo Cli::labels();
-        $command = './vendor/bin/pest --init';
-        $code = Core::execute($object, $command, $output, $notification);
-        if($output){
-            echo $output;
-        }
-        if($notification){
-            echo $notification;
-        }
-        if($code !== 0){
-            $exception = new Exception('Pest initialization failed...');
-            Event::trigger($object, 'raxon.org.test.main.run.test', [
-                'options' => $options,
-                'exception' => $exception,
-                'output' => $output,
-                'notification' => $notification
-            ]);
-            exit($code);
-        }
-        $command = './vendor/bin/pest';
-        $code = Core::execute($object, $command, $output, $notification);
-        if($output){
-            echo $output;
-        }
-        if($notification){
-            echo $notification;
-        }
-        if($code !== 0){
-            $exception = new Exception('Pest Tests failed...');
-            Event::trigger($object, 'raxon.org.test.main.run.test', [
-                'options' => $options,
-                'exception' => $exception,
-                'output' => $output,
-                'notification' => $notification
-            ]);
-            exit($code);
-        }
+        return $testsuite;
     }
 }
