@@ -186,6 +186,10 @@ trait Main {
         return File::write($url_xml, implode(PHP_EOL, $write));
     }
 
+    /**
+     * @throws DirectoryCreateException
+     * @throws Exception
+     */
     public function domain_copy($flags, $options, $testsuite): array
     {
         $object = $this->object();
@@ -211,7 +215,6 @@ trait Main {
         foreach($domains as $nr => $record){
             $dir_domain = $record->url;
             $dir_inner = $dir->read($dir_domain);
-            ddd($dir_inner);
             if($dir_inner){
                 foreach($dir_inner as $dir_inner_nr => $dir_record){
                     foreach($dir_tests as $dir_test){
@@ -246,9 +249,7 @@ trait Main {
                                         if(!Dir::is($dir_target)){
                                             Dir::create($dir_target, Dir::CHMOD);
                                         }
-                                        if(!File::exist($target)){
-                                            File::copy($file->url, $target);
-                                        }
+                                        File::copy($file->url, $target);
                                     }
                                 }
                             }
@@ -363,9 +364,7 @@ trait Main {
                                             if(!Dir::is($dir_target)){
                                                 Dir::create($dir_target, Dir::CHMOD);
                                             }
-                                            if(!File::exist($target)){
-                                                File::copy($file->url, $target);
-                                            }
+                                            File::copy($file->url, $target);
                                         }
                                     }
                                 }
