@@ -214,6 +214,7 @@ trait Main {
         }
         foreach($domains as $nr => $record){
             $dir_domain = $record->url;
+            ddd($dir_domain);
             $dir_inner = $dir->read($dir_domain);
             if($dir_inner){
                 foreach($dir_inner as $dir_inner_nr => $dir_record){
@@ -252,6 +253,12 @@ trait Main {
                                         File::copy($file->url, $target);
                                     }
                                 }
+                                echo Cli::info('Copying', [
+                                        'capitals' => true
+                                    ]) .
+                                    ' tests from ' . $record->name . PHP_EOL
+                                ;
+                                flush();
                             }
                         }
                     }
