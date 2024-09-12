@@ -183,6 +183,14 @@ trait Main {
         return File::write($url_xml, implode(PHP_EOL, $write));
     }
 
+    public function domain_copy($flags, $options, $testsuite): array
+    {
+        $object = $this->object();
+        $dir = new Dir();
+        ddd($object->config('project.dir.domain'));
+        return $testsuite;
+    }
+
     /**
      * @throws DirectoryCreateException
      * @throws ObjectException
