@@ -1,7 +1,7 @@
 <?php
 namespace Package\Raxon\Host\Trait;
 
-use Raxon\Node\Model\Node;
+use Raxon\Node\Module\Node;
 
 trait Import {
 
