@@ -22,8 +22,7 @@ class Cli extends Controller {
     const DIR = __DIR__ . '/';
     const MODULE_INFO = 'Info';
     const INFO = [
-        '{{binary()}} raxon/test                    | Test options',
-        '{{binary()}} raxon/test setup              | Test setup',
+        '{{binary()}} raxon/test                    | Test options',        
         '{{binary()}} raxon/test run                | Run tests'
     ];
 
