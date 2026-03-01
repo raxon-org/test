@@ -83,11 +83,13 @@ trait Main {
             ]);
             throw $exception;
         }
-        if(!Dir::is($object->config('project.dir.tests'))){
-            Dir::create($object->config('project.dir.tests'), Dir::CHMOD);
+        if(
+            $object->config('project.dir.test') &&
+            !Dir::is($object->config('project.dir.test'))
+        ){
+            Dir::create($object->config('project.dir.test'), Dir::CHMOD);
         }
         $testsuite = [];
-
         $testsuite = $this->vendor_copy($flags, $options, $packages, $testsuite);
         $testsuite = $this->domain_copy($flags, $options, $testsuite);
         $this->create_phpunit($flags, $options, $testsuite);
@@ -324,7 +326,7 @@ trait Main {
                                 File::exist($dir_test_url) &&
                                 Dir::is($dir_test_url)
                             ){
-                                $dir_target = $object->config('project.dir.tests') .
+                                $dir_target = $object->config('project.dir.test') .
                                     'Feature' .
                                     $object->config('ds') .
                                     ucfirst($dir_record->name) .
